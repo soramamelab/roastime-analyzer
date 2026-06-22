@@ -47,12 +47,29 @@ streamlit run app.py
 
 [Releases](https://github.com/mkuriya4989/roastime-analyzer/releases) からダウンロードしてください。
 
+### Linux（.deb）
+
+[Releases](https://github.com/mkuriya4989/roastime-analyzer/releases) から `.deb` をダウンロードしてインストールできます。
+
+```bash
+sudo dpkg -i roastime-analyzer_1.0.0_all.deb
+roastime-analyzer
+```
+
 ## ビルド（開発者向け）
+
+### macOS (.dmg)
 
 ```bash
 pip install pyinstaller
 python -m PyInstaller RoastimeAnalyzer_mac.spec --noconfirm
 hdiutil create -volname "RoastimeAnalyzer" -srcfolder dist/RoastimeAnalyzer.app -ov -format UDZO dist/RoastimeAnalyzer.dmg
+```
+
+### Linux (.deb)
+
+```bash
+bash build-deb.sh
 ```
 
 ## 言語

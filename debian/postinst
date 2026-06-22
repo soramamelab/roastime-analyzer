@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+APP_DIR=/opt/roastime-analyzer
+
+cd "$APP_DIR"
+python3 -m venv venv
+venv/bin/pip install --upgrade pip -q
+venv/bin/pip install -r requirements.txt -q
+
+chmod +x /usr/bin/roastime-analyzer
+
+update-desktop-database /usr/share/applications 2>/dev/null || true
+
+exit 0

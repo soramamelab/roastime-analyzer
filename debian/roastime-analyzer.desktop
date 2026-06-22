@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Roastime Analyzer
+Comment=Roastime 焙煎ログ解析アプリ
+Exec=/usr/bin/roastime-analyzer
+Icon=utilities-terminal
+Terminal=true
+Categories=Utility;
