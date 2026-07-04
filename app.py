@@ -3,6 +3,7 @@ import os
 import glob
 import subprocess
 import sys
+import urllib.request
 from collections import defaultdict
 from datetime import datetime
 
@@ -11,6 +12,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
+
+APP_VERSION = "1.1.0"
+_GITHUB_REPO = "soramamelab/roastime-analyzer"
+_RELEASES_URL = f"https://github.com/{_GITHUB_REPO}/releases/latest"
+_API_URL = f"https://api.github.com/repos/{_GITHUB_REPO}/releases/latest"
 
 # ── i18n ─────────────────────────────────────────────────────────────────────
 _TEXTS = {
@@ -169,6 +175,9 @@ _TEXTS = {
         "sum_avg_dtr": "平均DTR",
         "sum_avg_drop": "平均ドロップ温度",
         "sum_avg_fc": "平均FC温度",
+        # update check
+        "update_available": "🆕 新バージョン {ver} があります",
+        "update_download": "ダウンロードページへ",
         # copyright / donate
         "copyright": "© 2026 SORAMAME LAB INC.\nAll rights reserved.",
         "donate_title": "☕ Roastime Analyzerを気に入っていただけましたか？",
@@ -332,6 +341,9 @@ _TEXTS = {
         "sum_avg_dtr": "Avg DTR",
         "sum_avg_drop": "Avg Drop Temp",
         "sum_avg_fc": "Avg FC Temp",
+        # update check
+        "update_available": "🆕 New version {ver} available",
+        "update_download": "Go to download page",
         # copyright / donate
         "copyright": "© 2026 SORAMAME LAB INC.\nAll rights reserved.",
         "donate_title": "☕ Enjoying Roastime Analyzer?",
@@ -348,6 +360,47 @@ _ROAST_DIR = os.path.expanduser("~/Library/Application Support/roast-time/roasts
 _PAYPAL_URL = "https://paypal.me/soramamelab"
 _DONATE_INTERVAL_DAYS = 30
 _DONATED_INTERVAL_DAYS = 365
+_UPDATE_CHECK_INTERVAL_HOURS = 24
+
+
+def _check_latest_version() -> str | None:
+    """GitHub APIで最新バージョンを取得。失敗時はNoneを返す。結果は1日キャッシュ。"""
+    cache_key = "_update_check_cache"
+    cache_time_key = "_update_check_time"
+    now = datetime.now()
+    cached_time = st.session_state.get(cache_time_key)
+    if cached_time and (now - cached_time).total_seconds() < _UPDATE_CHECK_INTERVAL_HOURS * 3600:
+        return st.session_state.get(cache_key)
+    try:
+        req = urllib.request.Request(_API_URL, headers={"User-Agent": "RoastimeAnalyzer"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read())
+        latest = data.get("tag_name", "").lstrip("v")
+        st.session_state[cache_key] = latest
+        st.session_state[cache_time_key] = now
+        return latest
+    except Exception:
+        st.session_state[cache_key] = None
+        st.session_state[cache_time_key] = now
+        return None
+
+
+def _version_tuple(v: str):
+    try:
+        return tuple(int(x) for x in v.split("."))
+    except Exception:
+        return (0,)
+
+
+def _show_update_banner(T: dict) -> None:
+    latest = _check_latest_version()
+    if not latest:
+        return
+    if _version_tuple(latest) > _version_tuple(APP_VERSION):
+        st.sidebar.warning(
+            T["update_available"].format(ver=latest) +
+            f"  \n[{T['update_download']}]({_RELEASES_URL})"
+        )
 
 
 @st.dialog(" ")
@@ -490,6 +543,7 @@ with st.sidebar:
         st.stop()
 
     st.divider()
+    _show_update_banner(T)
     st.caption(T["copyright"])
 
 # ── 寄付ダイアログ ─────────────────────────────────────────────────────────────
