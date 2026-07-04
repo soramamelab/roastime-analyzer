@@ -174,8 +174,8 @@ _TEXTS = {
         "donate_title": "☕ Roastime Analyzerを気に入っていただけましたか？",
         "donate_body": "株式会社宙豆ラボ（SORAMAME LAB INC.）が開発・維持しているこのアプリを気に入っていただけたなら、開発費へのご寄付をいただけると大変励みになります。",
         "donate_btn": "💛 PayPalで寄付する",
-        "donate_skip": "今回はスキップ",
-        "donate_never": "今後表示しない",
+        "donate_skip": "また今度",
+        "donate_donated": "もう寄付しました",
     },
     "en": {
         "page_title": "Roastime Roast Log Analysis",
@@ -337,8 +337,8 @@ _TEXTS = {
         "donate_title": "☕ Enjoying Roastime Analyzer?",
         "donate_body": "Roastime Analyzer is developed and maintained by SORAMAME LAB INC. (株式会社宙豆ラボ). If you find it useful, please consider supporting the development with a small donation.",
         "donate_btn": "💛 Donate via PayPal",
-        "donate_skip": "Skip for now",
-        "donate_never": "Don't show again",
+        "donate_skip": "Maybe later",
+        "donate_donated": "I already donated",
     },
 }
 
@@ -347,6 +347,7 @@ _CONFIG_PATH = os.path.expanduser("~/.config/roastime-analyzer/config.json")
 _ROAST_DIR = os.path.expanduser("~/Library/Application Support/roast-time/roasts")
 _PAYPAL_URL = "https://paypal.me/soramamelab"
 _DONATE_INTERVAL_DAYS = 30
+_DONATED_INTERVAL_DAYS = 365
 
 
 @st.dialog(" ")
@@ -359,24 +360,24 @@ def _show_donate_dialog(T: dict) -> None:
     with col1:
         if st.button(T["donate_skip"], use_container_width=True):
             st.session_state.last_donate_prompt = datetime.now().isoformat()
+            st.session_state.donated = False
             _save_config()
             st.rerun()
     with col2:
-        if st.button(T["donate_never"], use_container_width=True, type="secondary"):
-            st.session_state.donate_never = True
+        if st.button(T["donate_donated"], use_container_width=True, type="secondary"):
             st.session_state.last_donate_prompt = datetime.now().isoformat()
+            st.session_state.donated = True
             _save_config()
             st.rerun()
 
 
 def _maybe_show_donate(T: dict) -> None:
-    if st.session_state.get("donate_never", False):
-        return
     last = st.session_state.get("last_donate_prompt", "")
     if last:
         try:
             days = (datetime.now() - datetime.fromisoformat(last)).days
-            if days < _DONATE_INTERVAL_DAYS:
+            interval = _DONATED_INTERVAL_DAYS if st.session_state.get("donated", False) else _DONATE_INTERVAL_DAYS
+            if days < interval:
                 return
         except Exception:
             pass
@@ -410,7 +411,7 @@ def _save_config() -> None:
         "exclude_keywords": st.session_state.get("exclude_keywords", "test, preheat, NG"),
         "lang": st.session_state.get("lang", "ja"),
         "last_donate_prompt": st.session_state.get("last_donate_prompt", ""),
-        "donate_never": st.session_state.get("donate_never", False),
+        "donated": st.session_state.get("donated", False),
     }
     try:
         os.makedirs(os.path.dirname(_CONFIG_PATH), exist_ok=True)
@@ -430,7 +431,7 @@ if "initialized" not in st.session_state:
     st.session_state.exclude_keywords = _cfg.get("exclude_keywords", "test, preheat, NG")
     st.session_state.lang = _cfg.get("lang", "ja")
     st.session_state.last_donate_prompt = _cfg.get("last_donate_prompt", "")
-    st.session_state.donate_never = _cfg.get("donate_never", False)
+    st.session_state.donated = _cfg.get("donated", False)
     st.session_state.initialized = True
 
 # ── 言語選択 ──────────────────────────────────────────────────────────────────
