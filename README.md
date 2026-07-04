@@ -86,9 +86,20 @@ roastime-analyzer
 
 ---
 
+## 寄付のお願い
+
+Roastime Analyzerは **株式会社宙豆ラボ（SORAMAME LAB INC.）** が開発・維持しているフリーソフトウェアです。
+もし気に入っていただけたなら、開発継続のためのご支援をいただけると大変励みになります。
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://paypal.me/soramamelab)
+
+---
+
 ## ライセンス
 
 MIT License
+
+© 2026 SORAMAME LAB INC. All rights reserved.
 
 ---
 
@@ -181,6 +192,17 @@ roastime-analyzer
 
 ---
 
+## Support the Development
+
+Roastime Analyzer is free software developed and maintained by **SORAMAME LAB INC. (株式会社宙豆ラボ)**.
+If you find it useful, please consider supporting the project with a donation.
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://paypal.me/soramamelab)
+
+---
+
 ## License
 
 MIT License
+
+© 2026 SORAMAME LAB INC. All rights reserved.
