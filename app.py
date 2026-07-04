@@ -169,6 +169,13 @@ _TEXTS = {
         "sum_avg_dtr": "平均DTR",
         "sum_avg_drop": "平均ドロップ温度",
         "sum_avg_fc": "平均FC温度",
+        # copyright / donate
+        "copyright": "© 2026 SORAMAME LAB INC.\nAll rights reserved.",
+        "donate_title": "☕ Roastime Analyzerを気に入っていただけましたか？",
+        "donate_body": "株式会社宙豆ラボ（SORAMAME LAB INC.）が開発・維持しているこのアプリを気に入っていただけたなら、開発費へのご寄付をいただけると大変励みになります。",
+        "donate_btn": "💛 PayPalで寄付する",
+        "donate_skip": "今回はスキップ",
+        "donate_never": "今後表示しない",
     },
     "en": {
         "page_title": "Roastime Roast Log Analysis",
@@ -325,12 +332,55 @@ _TEXTS = {
         "sum_avg_dtr": "Avg DTR",
         "sum_avg_drop": "Avg Drop Temp",
         "sum_avg_fc": "Avg FC Temp",
+        # copyright / donate
+        "copyright": "© 2026 SORAMAME LAB INC.\nAll rights reserved.",
+        "donate_title": "☕ Enjoying Roastime Analyzer?",
+        "donate_body": "Roastime Analyzer is developed and maintained by SORAMAME LAB INC. (株式会社宙豆ラボ). If you find it useful, please consider supporting the development with a small donation.",
+        "donate_btn": "💛 Donate via PayPal",
+        "donate_skip": "Skip for now",
+        "donate_never": "Don't show again",
     },
 }
 
 # ── 設定の永続化 ──────────────────────────────────────────────────────────────
 _CONFIG_PATH = os.path.expanduser("~/.config/roastime-analyzer/config.json")
 _ROAST_DIR = os.path.expanduser("~/Library/Application Support/roast-time/roasts")
+_PAYPAL_URL = "https://paypal.me/soramamelab"
+_DONATE_INTERVAL_DAYS = 30
+
+
+@st.dialog(" ")
+def _show_donate_dialog(T: dict) -> None:
+    st.markdown(f"### {T['donate_title']}")
+    st.write(T["donate_body"])
+    st.markdown(f"[{T['donate_btn']}]({_PAYPAL_URL})", unsafe_allow_html=False)
+    st.write("")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button(T["donate_skip"], use_container_width=True):
+            st.session_state.last_donate_prompt = datetime.now().isoformat()
+            _save_config()
+            st.rerun()
+    with col2:
+        if st.button(T["donate_never"], use_container_width=True, type="secondary"):
+            st.session_state.donate_never = True
+            st.session_state.last_donate_prompt = datetime.now().isoformat()
+            _save_config()
+            st.rerun()
+
+
+def _maybe_show_donate(T: dict) -> None:
+    if st.session_state.get("donate_never", False):
+        return
+    last = st.session_state.get("last_donate_prompt", "")
+    if last:
+        try:
+            days = (datetime.now() - datetime.fromisoformat(last)).days
+            if days < _DONATE_INTERVAL_DAYS:
+                return
+        except Exception:
+            pass
+    _show_donate_dialog(T)
 
 
 def _get_roast_dir():
@@ -359,6 +409,8 @@ def _save_config() -> None:
         "use_latest": st.session_state.get("use_latest", False),
         "exclude_keywords": st.session_state.get("exclude_keywords", "test, preheat, NG"),
         "lang": st.session_state.get("lang", "ja"),
+        "last_donate_prompt": st.session_state.get("last_donate_prompt", ""),
+        "donate_never": st.session_state.get("donate_never", False),
     }
     try:
         os.makedirs(os.path.dirname(_CONFIG_PATH), exist_ok=True)
@@ -377,6 +429,8 @@ if "initialized" not in st.session_state:
     st.session_state.use_latest = _cfg.get("use_latest", False)
     st.session_state.exclude_keywords = _cfg.get("exclude_keywords", "test, preheat, NG")
     st.session_state.lang = _cfg.get("lang", "ja")
+    st.session_state.last_donate_prompt = _cfg.get("last_donate_prompt", "")
+    st.session_state.donate_never = _cfg.get("donate_never", False)
     st.session_state.initialized = True
 
 # ── 言語選択 ──────────────────────────────────────────────────────────────────
@@ -433,6 +487,12 @@ with st.sidebar:
         b.appendChild(h);
         </script>""", height=0)
         st.stop()
+
+    st.divider()
+    st.caption(T["copyright"])
+
+# ── 寄付ダイアログ ─────────────────────────────────────────────────────────────
+_maybe_show_donate(T)
 
 # ── データ解析 ─────────────────────────────────────────────────────────────────
 
