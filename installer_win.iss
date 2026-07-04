@@ -1,13 +1,13 @@
 [Setup]
 AppId={{B5A3F1E2-7C4D-4E8A-9F2B-1A3C5D7E9F0B}
 AppName=RoastimeAnalyzer
-AppVersion=1.0.0
-AppVerName=RoastimeAnalyzer 1.0.0
+AppVersion=1.1.0
+AppVerName=RoastimeAnalyzer 1.1.0
 AppPublisher=Kuriya Coffee Roasters
 DefaultDirName={autopf}\RoastimeAnalyzer
 DefaultGroupName=RoastimeAnalyzer
 OutputDir=dist
-OutputBaseFilename=RoastimeAnalyzer_Setup_1.0.0
+OutputBaseFilename=RoastimeAnalyzer_Setup_1.1.0
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
