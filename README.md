@@ -1,8 +1,14 @@
-# ☕ RoastimeAnalyzer
+# ☕ Roastime Analyzer
 
-Aillio Bullet の焙煎ログ解析アプリ。Roastime のローカルデータを自動で読み込み、焙煎プロファイルの比較・分析ができます。
+**日本語** | [English](#english)
 
-**データはすべてPC内で処理されます。外部には送信されません。**
+[Aillio Bullet Roaster](https://aillio.com/) 専用の焙煎管理ソフト **ROASTIME** で保存した焙煎データを統計的に解析するローカルアプリです。
+データはすべてあなたのPC内で処理されます。外部サーバーへの送信は一切ありません。
+
+![License](https://img.shields.io/badge/License-MIT-green)
+![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)
+
+---
 
 ## 機能
 
@@ -16,68 +22,187 @@ Aillio Bullet の焙煎ログ解析アプリ。Roastime のローカルデータ
 | 📋 バッチ一覧 | 全データのテーブル表示 |
 | 📥 エクスポート | CSV / Excel 出力、豆別サマリー統計 |
 
-## フィルタ
+**その他の特徴：**
+- ROASTIMEのローカルデータを自動検出（フォルダ選択不要）
+- バッチハイライト・最新バッチ自動選択
+- 日本語 / English 切替対応
 
-- 豆の種類
-- バッチ量（範囲指定）
-- 日付範囲
-- テストバッチ除外（キーワード指定）
-- バッチハイライト（最新バッチ自動選択対応）
+---
 
 ## データソース
 
-Roastime のローカルデータを自動検出して読み込みます（フォルダ選択不要）。
+ROASTIMEのローカルデータを自動で読み込みます。
 
-| OS | パス |
-|----|------|
+| OS | データパス |
+|----|-----------|
 | macOS | `~/Library/Application Support/roast-time/roasts/` |
 | Windows | `%APPDATA%/roast-time/roasts/` |
 | Linux | `~/.config/roast-time/roasts/` |
 
-## インストール・起動
+---
 
-### Python から直接実行
+## ダウンロード・インストール
+
+[Releases](https://github.com/soramamelab/roastime-analyzer/releases) から最新版をダウンロードしてください。
+
+### macOS
+
+1. `RoastimeAnalyzer-x.x.x.dmg` をダウンロード
+2. DMGファイルを開き、`RoastimeAnalyzer.app` を **アプリケーション** フォルダへドラッグ
+3. 初回起動時は右クリック →「開く」を選択（Gatekeeperの警告を回避）
+
+### Windows
+
+1. `RoastimeAnalyzer_Setup.exe` をダウンロード
+2. インストーラーを実行してウィザードに従う
+3. スタートメニューまたはデスクトップのショートカットから起動
+
+### Linux (Ubuntu / Debian)
 
 ```bash
-pip install streamlit plotly pandas statsmodels openpyxl
-streamlit run app.py
+sudo dpkg -i roastime-analyzer_x.x.x_all.deb
 ```
 
-### macOS アプリ（.dmg）
-
-> **⚠️ Apple Silicon（M1/M2/M3/M4）専用です。macOS Intel版は非対応です。**
-
-[Releases](https://github.com/mkuriya4989/roastime-analyzer/releases) からダウンロードしてください。
-
-### Linux（.deb）
-
-[Releases](https://github.com/mkuriya4989/roastime-analyzer/releases) から `.deb` をダウンロードしてインストールできます。
+インストール後はターミナルまたはアプリケーションメニューから起動：
 
 ```bash
-sudo dpkg -i roastime-analyzer_1.0.0_all.deb
 roastime-analyzer
 ```
 
-## ビルド（開発者向け）
+---
 
-### macOS (.dmg)
+## 使い方
 
-```bash
-pip install pyinstaller
-python -m PyInstaller RoastimeAnalyzer_mac.spec --noconfirm
-hdiutil create -volname "RoastimeAnalyzer" -srcfolder dist/RoastimeAnalyzer.app -ov -format UDZO dist/RoastimeAnalyzer.dmg
-```
+1. アプリを起動すると ROASTIMEのデータが自動で読み込まれます
+2. 豆・バッチ量・日付でフィルタしながら各タブで解析
+3. **「最新バッチを自動選択」** をオンにすると、焙煎直後に自動でデータが更新される
 
-### Linux (.deb)
+---
 
-```bash
-bash build-deb.sh
-```
+## 動作要件
 
-## 言語
+- **ROASTIME** がインストールされていること（データの自動検出のため）
+- macOS 11.0 以降 / Windows 10 以降 / Ubuntu 20.04 以降
 
-日本語 / English 切替対応
+---
+
+## 寄付のお願い
+
+Roastime Analyzerは **株式会社宙豆ラボ（SORAMAME LAB INC.）** が開発・維持しているフリーソフトウェアです。
+もし気に入っていただけたなら、開発継続のためのご支援をいただけると大変励みになります。
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://paypal.me/soramamelab)
+
+---
 
 ## ライセンス
 
-MIT
+MIT License
+
+© 2026 SORAMAME LAB INC. All rights reserved.
+
+---
+
+---
+
+<a name="english"></a>
+
+# ☕ Roastime Analyzer
+
+**[日本語](#)** | **English**
+
+A local application for statistically analyzing roast data saved by **ROASTIME**, the dedicated roast management software for the [Aillio Bullet Roaster](https://aillio.com/).
+All data is processed on your PC. Nothing is sent to any external server.
+
+---
+
+## Features
+
+| Tab | Content |
+|-----|---------|
+| 📊 Summary | Batch count, bean varieties, avg. roast time/DTR/drop temp, bean & monthly charts |
+| 📈 Profile Comparison | IBTS / BT / ET / RoR overlay, TP / YP / FC / SC markers |
+| ⚖️ Weight | Weight loss distribution, bean averages, trends |
+| 🔍 Correlation | Scatter plots, regression lines, and correlation matrix for any metric pair |
+| 🎨 Color Analysis | Whole/Ground color values, Gap analysis, time series, box plots |
+| 📋 Batch List | Full data table view |
+| 📥 Export | CSV / Excel output, per-bean summary statistics |
+
+**Additional features:**
+- Auto-detects ROASTIME local data (no folder selection needed)
+- Batch highlight and auto-select latest batch
+- Japanese / English UI toggle
+
+---
+
+## Data Source
+
+Roastime Analyzer automatically reads ROASTIME's local data.
+
+| OS | Data Path |
+|----|-----------|
+| macOS | `~/Library/Application Support/roast-time/roasts/` |
+| Windows | `%APPDATA%/roast-time/roasts/` |
+| Linux | `~/.config/roast-time/roasts/` |
+
+---
+
+## Download & Install
+
+Download the latest version from [Releases](https://github.com/soramamelab/roastime-analyzer/releases).
+
+### macOS
+
+1. Download `RoastimeAnalyzer-x.x.x.dmg`
+2. Open the DMG and drag `RoastimeAnalyzer.app` to your **Applications** folder
+3. On first launch, right-click → Open (to bypass Gatekeeper warning)
+
+### Windows
+
+1. Download `RoastimeAnalyzer_Setup.exe`
+2. Run the installer and follow the wizard
+3. Launch from the Start menu or desktop shortcut
+
+### Linux (Ubuntu / Debian)
+
+```bash
+sudo dpkg -i roastime-analyzer_x.x.x_all.deb
+```
+
+After installation, launch from the terminal or application menu:
+
+```bash
+roastime-analyzer
+```
+
+---
+
+## Usage
+
+1. Launch the app — ROASTIME data is loaded automatically
+2. Filter by bean, batch weight, or date range and explore each tab
+3. Enable **"Auto-select latest batch"** to automatically refresh data right after a roast
+
+---
+
+## Requirements
+
+- **ROASTIME** must be installed (for automatic data detection)
+- macOS 11.0+ / Windows 10+ / Ubuntu 20.04+
+
+---
+
+## Support the Development
+
+Roastime Analyzer is free software developed and maintained by **SORAMAME LAB INC. (株式会社宙豆ラボ)**.
+If you find it useful, please consider supporting the project with a donation.
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://paypal.me/soramamelab)
+
+---
+
+## License
+
+MIT License
+
+© 2026 SORAMAME LAB INC. All rights reserved.
