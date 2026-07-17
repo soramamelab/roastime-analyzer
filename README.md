@@ -45,6 +45,8 @@ streamlit run app.py
 
 ### macOS アプリ（.dmg）
 
+> **⚠️ Apple Silicon（M1/M2/M3/M4）専用です。macOS Intel版は非対応です。**
+
 [Releases](https://github.com/mkuriya4989/roastime-analyzer/releases) からダウンロードしてください。
 
 ### Linux（.deb）

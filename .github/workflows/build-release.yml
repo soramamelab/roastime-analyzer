@@ -1,0 +1,120 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  # ── macOS Apple Silicon (arm64) ─────────────────────────────────────────────
+  build-macos-arm64:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+
+      - name: Build (arm64)
+        run: python -m PyInstaller RoastimeAnalyzer_mac.spec --noconfirm
+
+      - name: Create DMG (arm64)
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          hdiutil create \
+            -volname "RoastimeAnalyzer" \
+            -srcfolder dist/RoastimeAnalyzer.app \
+            -ov -format UDZO \
+            dist/RoastimeAnalyzer-${VERSION}-arm64.dmg
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-arm64
+          path: dist/RoastimeAnalyzer-*-arm64.dmg
+
+  # ── Windows ─────────────────────────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller pillow
+
+      - name: Create placeholder icon
+        shell: python
+        run: |
+          from PIL import Image
+          img = Image.new('RGBA', (32, 32), (139, 90, 43, 255))
+          img.save('icon.ico', format='ICO', sizes=[(32, 32), (16, 16)])
+
+      - name: Build
+        run: python -m PyInstaller RoastimeAnalyzer_win.spec --noconfirm
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Create installer
+        shell: cmd
+        run: |
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: installer_output/RoastimeAnalyzer_Setup.exe
+
+  # ── Linux (deb) ─────────────────────────────────────────────────────────────
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build deb
+        run: bash build-deb.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dist/*.deb
+
+  # ── Release ─────────────────────────────────────────────────────────────────
+  release:
+    needs: [build-macos-arm64, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: always() && !cancelled()
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

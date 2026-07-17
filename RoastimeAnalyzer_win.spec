@@ -6,18 +6,16 @@ binaries = []
 hiddenimports = [
     'streamlit.web.cli',
     'streamlit.runtime.scriptrunner',
-    'streamlit.runtime.scriptrunner.magic_funcs',
-    'altair',
-    'openpyxl',
+    'streamlit.runtime.scriptrunner.script_runner',
+    'pkg_resources.extern',
 ]
 
-for pkg in ['streamlit', 'plotly', 'pandas', 'statsmodels', 'altair', 'pyarrow']:
-    tmp = collect_all(pkg)
-    datas    += tmp[0]
-    binaries += tmp[1]
-    hiddenimports += tmp[2]
-
-datas += collect_data_files('openpyxl')
+for pkg in ('streamlit', 'plotly', 'pandas', 'statsmodels', 'openpyxl', 'altair'):
+    try:
+        tmp = collect_all(pkg)
+        datas += tmp[0]; binaries += tmp[1]; hiddenimports += tmp[2]
+    except Exception:
+        pass
 
 a = Analysis(
     ['launcher.py'],
@@ -28,7 +26,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['matplotlib', 'PIL', 'pydeck', 'IPython', 'jupyter'],
+    excludes=[],
     noarchive=False,
     optimize=0,
 )
@@ -43,20 +41,19 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=False,
+    upx=True,
     console=False,
+    icon='icon.ico',
     disable_windowed_traceback=False,
     argv_emulation=False,
-    codesign_identity=None,
-    entitlements_file=None,
-    icon=None,
+    target_arch=None,
 )
-
 coll = COLLECT(
     exe,
     a.binaries,
     a.datas,
     strip=False,
-    upx=False,
+    upx=True,
+    upx_exclude=[],
     name='RoastimeAnalyzer',
 )

@@ -1,10 +1,10 @@
 Package: roastime-analyzer
-Version: 1.1.0
+Version: 1.0.0
 Section: utils
 Priority: optional
 Architecture: all
 Depends: python3 (>= 3.10), python3-venv, python3-pip
 Maintainer: mkuriya4989 <mkuriya@gmail.com>
 Description: Roastime 焙煎ログ解析アプリ
- Aillio Bullet の Roastime 焙煎ログを統計的に解析するローカルWebアプリです。
+ Aillio Bullet の焙煎ログをローカルで解析するWebアプリです。
  データはすべてローカルで処理され、外部サーバーへの送信は一切ありません。
