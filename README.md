@@ -7,6 +7,7 @@
 
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)
+![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20のみ-orange)
 
 ---
 
@@ -47,7 +48,9 @@ ROASTIMEのローカルデータを自動で読み込みます。
 
 ### macOS
 
-1. `RoastimeAnalyzer-x.x.x.dmg` をダウンロード
+> ⚠️ **Apple Silicon（M1/M2/M3/M4）専用です。Intel Mac には対応していません。**
+
+1. `RoastimeAnalyzer-x.x.x-arm64.dmg` をダウンロード
 2. DMGファイルを開き、`RoastimeAnalyzer.app` を **アプリケーション** フォルダへドラッグ
 3. 初回起動時は右クリック →「開く」を選択（Gatekeeperの警告を回避）
 
@@ -82,7 +85,7 @@ roastime-analyzer
 ## 動作要件
 
 - **ROASTIME** がインストールされていること（データの自動検出のため）
-- macOS 11.0 以降 / Windows 10 以降 / Ubuntu 20.04 以降
+- macOS 11.0 以降（**Apple Silicon 専用。Intel Mac 非対応**）/ Windows 10 以降 / Ubuntu 20.04 以降
 
 ---
 
@@ -113,6 +116,10 @@ MIT License
 
 A local application for statistically analyzing roast data saved by **ROASTIME**, the dedicated roast management software for the [Aillio Bullet Roaster](https://aillio.com/).
 All data is processed on your PC. Nothing is sent to any external server.
+
+![License](https://img.shields.io/badge/License-MIT-green)
+![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)
+![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20only-orange)
 
 ---
 
@@ -153,7 +160,9 @@ Download the latest version from [Releases](https://github.com/soramamelab/roast
 
 ### macOS
 
-1. Download `RoastimeAnalyzer-x.x.x.dmg`
+> ⚠️ **Apple Silicon (M1/M2/M3/M4) only. Intel Mac is not supported.**
+
+1. Download `RoastimeAnalyzer-x.x.x-arm64.dmg`
 2. Open the DMG and drag `RoastimeAnalyzer.app` to your **Applications** folder
 3. On first launch, right-click → Open (to bypass Gatekeeper warning)
 
@@ -188,7 +197,7 @@ roastime-analyzer
 ## Requirements
 
 - **ROASTIME** must be installed (for automatic data detection)
-- macOS 11.0+ / Windows 10+ / Ubuntu 20.04+
+- macOS 11.0+ (**Apple Silicon only. Intel Mac is not supported.**) / Windows 10+ / Ubuntu 20.04+
 
 ---
 

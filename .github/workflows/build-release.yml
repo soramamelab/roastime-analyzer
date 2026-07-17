@@ -118,3 +118,18 @@ jobs:
         with:
           files: artifacts/**/*
           generate_release_notes: true
+          body: |
+            ## ⚠️ macOS について / macOS Notice
+
+            **🍎 Apple Silicon（M1/M2/M3/M4）専用です。Intel Mac には対応していません。**
+            **🍎 Apple Silicon (M1/M2/M3/M4) only. Intel Mac is NOT supported.**
+
+            ---
+
+            ## ダウンロード / Downloads
+
+            | OS | ファイル |
+            |----|---------|
+            | macOS (Apple Silicon) | `RoastimeAnalyzer-*-arm64.dmg` |
+            | Windows (x64) | `RoastimeAnalyzer_Setup.exe` |
+            | Linux (Ubuntu/Debian) | `roastime-analyzer_*_all.deb` |
